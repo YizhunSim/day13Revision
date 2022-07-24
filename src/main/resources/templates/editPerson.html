@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit A Person</title>
+  </head>
+  <body>
+    <h1>Edit a Person:</h1>
+    <form
+      th:action="@{/updatePerson/{id}(id=${person.id})}"
+      th:object="${person}"
+      method="POST"
+    >
+      <p>
+        Id:
+        <input type="text" th:readonly="true" th:field="*{id}" name="id" />
+      </p>
+      <br />
+      <p>
+        First Name:
+        <input type="text" th:field="*{firstName}" name="firstName" />
+      </p>
+      <br />
+      <p>
+        Last Name:
+        <input type="text" th:field="*{lastName}" name="lastName" />
+      </p>
+      <br />
+      <input type="submit" value="Update" />
+    </form>
+  </body>
+</html>

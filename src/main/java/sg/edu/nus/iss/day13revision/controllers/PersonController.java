@@ -7,7 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 // import org.springframework.web.bind.annotation.GetMapping;
 // import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,10 +77,42 @@ public class PersonController {
 
         return "redirect:/personList";
     }
-
-    model.addAttribute("errorMessage", errorMessage);
-    return "addPerson";
+    else{
+      model.addAttribute("errorMessage", errorMessage);
+      return "addPerson";
+    }
   }
+
+  @GetMapping(value="/editPerson/{id}", produces="text/html")
+  public String showEditPersonForm(@PathVariable("id") String id, Model model){
+    Person p = personService.getPerson(id);
+    System.out.printf("> id: %s\n", id);
+    System.out.println(p);
+
+    model.addAttribute("person", p);
+    return "editPerson";
+ }
+
+
+
+   @PostMapping(value="/updatePerson/{id}", produces="text/html")
+  public String updatePerson(@PathVariable("id") String id, @ModelAttribute("personForm") PersonForm personForm, Model model){
+    Person p = personService.getPerson(id);
+    p.setFirstName(personForm.getFirstName());
+    p.setLastName(personForm.getLastName());
+    personService.updatePerson(p);
+    return "redirect:/personList";
+  }
+
+  @GetMapping(value="/deletePerson/{id}", produces="text/html")
+    public String deletePerson(@PathVariable("id") String id){
+      Person p = personService.getPerson(id);
+      personService.deletePerson(p);
+      return "redirect:/personList";
+    }
+
+
+
   // @GetMapping()
   // public boolean addPerson(){
   //   return true;
